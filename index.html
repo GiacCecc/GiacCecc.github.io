@@ -1,1 +1,1402 @@
-<p>Hello World! This is my first web page.</p>
+
+
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>ASC - Bagno PT</title>
+        <meta name="description" content="Piastrelle per Ascianellino" />
+        <meta name="author" content="Giacomo Ceccarelli" />
+        <!-- <script src="https://cdn.jsdelivr.net/npm/toolcool-range-slider/dist/plugins/tcrs-moving-tooltip.min.js" ></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/toolcool-range-slider/dist/toolcool-range-slider.min.js" ></script>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+            }
+            body {
+                overflow: hidden;
+            }
+
+
+
+            /** MAIN CONTAINER */
+            #container {
+                display: grid;
+                grid-auto-flow: column;
+                grid-auto-rows: 1fr;
+                grid-template-columns: 3fr 3fr 3fr 3fr 2fr;
+                grid-template-rows: 1fr;
+                gap: 0px 0px;
+                grid-template-areas:
+                    "wallAreaOne wallAreaTwo wallAreaThree wallAreaFour generalSettings";
+                justify-content: center;
+                align-content: center;
+                justify-items: center;
+                align-items: center;
+
+                width: 100vw;
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            /*** WALL AREAS */
+            .wallArea {
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: 2fr 9fr 4fr;
+                gap: 0px 0px;
+                
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+            #wallAreaOne {
+                grid-area: wallAreaOne;
+                grid-template-areas:
+                    "titleOne"
+                    "divOne"
+                    "settingsOne";
+            }
+            #wallAreaTwo {
+                grid-area: wallAreaTwo;
+                grid-template-areas:
+                    "titleTwo"
+                    "divTwo"
+                    "settingsTwo";
+            }
+            #wallAreaThree {
+                grid-area: wallAreaThree;
+                grid-template-areas:
+                    "titleThree"
+                    "divThree"
+                    "settingsThree";
+            }
+            #wallAreaFour {
+                grid-area: wallAreaFour;
+                grid-template-areas:
+                    "titleFour"
+                    "divFour"
+                    "settingsFour";
+            }
+
+            /**** WALL TITLES */
+            .wallTitle {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                width: 100%;
+                height: 100%;
+                font-style: italic;
+                font-weight: 200;
+                /* background-color: aquamarine; */
+            }
+            .wallTitle p {
+                margin-bottom: 4px;
+                font-size: 1.1rem;
+            }
+            #titleOne { grid-area: titleOne; }
+            #titleTwo { grid-area: titleTwo; }
+            #titleThree { grid-area: titleThree; }
+            #titleFour { grid-area: titleFour; }
+            
+            /**** WALL DIVS */
+            .wallDiv {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 60vh;
+                max-height: 1000px;
+                width: auto;
+                /* background-color: blueviolet; */
+            }
+            #divOne { grid-area: divOne; }
+            #divTwo { grid-area: divTwo; }
+            #divThree { grid-area: divThree; }
+            #divFour { grid-area: divFour; }
+            .wallSvg { height: 100%; }
+            
+            /**** WALL SETTINGS */
+            .wallSettings {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+                /* background-color: cadetblue; */
+                overflow-y: scroll;
+            }
+            #settingsOne { grid-area: settingsOne; }
+            #settingsTwo { grid-area: settingsTwo; }
+            #settingsThree { grid-area: settingsThree; }
+            #settingsFour { grid-area: settingsFour; }
+
+            .wallInfoDiv {
+                display: inline-flex;
+                flex-direction: column;
+                /* flex-wrap: nowrap; */
+                justify-content: center;
+                /* align-items: stretch; */
+                /* align-content: stretch; */
+                width: 50%;
+            }
+            .uniqueInfoDiv {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: baseline;
+                font-style: italic;
+            }
+            .infoTitle {
+                width: 55%;
+
+            }
+            .nettoSurface {
+                width: 25%;
+                text-align: right;
+                font-weight: 600;
+            }
+            .grossSurface {
+                width: 25%;
+                text-align: right;
+                font-weight: 600;
+            }
+            .numTiles {
+                width: 25%;
+                text-align: right;
+                font-weight: 600;
+            }
+            .infoUnit {
+                width: 20%;
+                text-align: center;
+            }
+
+            /***** SLIDERS */
+            .colorSlider {
+                margin: 24px 0px;
+            }
+
+            /**** SETTINGS BUTTONS */
+            .btn {
+                cursor: pointer;
+                /* margin: 16px; */
+                
+                border: 1pt solid #000;
+                background-color: #FFF;
+
+                color: #000;
+                font-size: .67rem;
+            }
+            .btn:hover {
+                border: none;
+                background-color: #000;
+                color: #FFF;
+                font-weight: 800;
+            }
+            
+            /**** SAVE ALL BUTTONS */
+            .refresh {
+                width: 60px;
+                height: 24px;
+                border-radius: 12px;
+            }
+
+
+
+            /**** GENERAL SETTINGS DIV */
+            .generalSettings {
+
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: 2fr 5fr 4fr 4fr;
+                grid-template-areas:
+                    "mainTitle"
+                    "tilesFormat"
+                    "whiteWallOpacity"
+                    "saveAll";
+                gap: 0px 0px;
+                place-items: center;
+                
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+
+                grid-area: generalSettings;
+                background-color: #EFEFEF; /* rgb(196, 236, 237)*/
+            }
+            .generalSettings h5 {
+                margin: 16px 0;
+            }
+            #mainTitle {
+                grid-area: mainTitle;
+                text-align: center;
+                font-style: italic;
+            }
+            #tilesFormat {
+                grid-area: tilesFormat;
+                text-align: center;
+                font-style: italic;
+            }
+            #whiteWallOpacity {
+                grid-area: whiteWallOpacity;
+                text-align: center;
+                font-style: italic;
+            }
+            #saveAll { grid-area: saveAll;}
+        
+
+
+
+
+
+            .allWallsInfoDiv {
+                display: inline-flex;
+                flex-direction: column;
+                /* flex-wrap: nowrap; */
+                justify-content: center;
+                /* align-items: stretch; */
+                /* align-content: stretch; */
+                width: 80%;
+            }
+            .totalInfoDiv {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: baseline;
+                font-style: italic;
+            }
+
+            .totalInfoTitle {
+                width: 65%;
+
+            }
+            .totalInfoValue {
+                width: 25%;
+                text-align: right;
+                font-weight: 600;
+            }
+            .totalInfoUnit {
+                width: 20%;
+                text-align: center;
+            }
+
+
+
+
+
+
+            /**** FORMAT BUTTONS */
+            .format {
+                cursor: pointer;
+                margin: 0 4px 16px 4px;
+                
+                border: 1pt solid #000;
+                background-color: #FFF;
+
+                color: #000;
+                font-size: .67rem;
+            }
+            .format:hover {
+                border: 2pt solid #000;
+            }
+
+            /**** SAVE ALL BUTTONS */
+            .saveAllDiv {
+                margin: 36px 0;
+            }
+            .saveAll {
+                /* margin-top: 36px; */
+                width: 40px;
+                height: 28px;
+                border-radius: 14px;
+            }
+
+
+
+
+
+            
+        </style>
+    </head>
+
+
+    <body>
+        <div id="container">
+            <!-- WALL ONE -->
+            <div class="wallArea" id="wallAreaOne">
+                <div class="wallTitle" id="titleOne">
+                    <p>Antibagno</p>
+                    <h3>01</h3>
+                </div>
+                <div class="wallDiv" id="divOne">
+                    <svg class="wallSvg" id="svgOne" xmlns="http://www.w3.org/2000/svg">
+                        <!-- <rect x="0" y="0" width="800" height="3200" fill="#666" /> -->
+                        <g class="tilesGroup" id="tilesOne"></g>
+                        <g id="contourGroup">
+                            <polygon class="whiteWall" points="0,3100 0,3200 800,3200 800,0 670,0 670,3100" style="fill:#FFF;stroke:#FFF;stroke-width:7pt;;opacity: 0.85;" />
+                            <polygon points="0,0 0,3100 670,3100 670,0" style="fill:none;stroke:#FFF;stroke-width:5pt" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="wallSettings" id="settingsOne">
+                    <div class="wallInfoDiv">
+                        <div class="uniqueInfoDiv">
+                            <div class="infoTitle">Superficie netta: </div>
+                            <div class="nettoSurface" id="nettoSurfaceOne">2.08</div>
+                            <div class="infoUnit"> m<sup>2</sup></div>
+                        </div>
+                        <div class="uniqueInfoDiv">
+                            <div class="infoTitle">Superficie lorda: </div>
+                            <div class="grossSurface" id="grossSurfaceOne"></div>
+                            <div class="infoUnit"> m<sup>2</sup></div>
+                        </div>
+                        <div class="uniqueInfoDiv">
+                            <div class="infoTitle">Quantitá: </div>
+                            <div class="numTiles" id="numTilesOne"></div>
+                            <div class="infoUnit"> p.zi</div>
+                        </div>
+                    </div>
+                    <tc-range-slider class="colorSlider" id="sliderOne"
+                    min="0.00"
+                    max="1.00"
+                    value1="0.25"
+                    value2="0.35"
+                    ></tc-range-slider>
+                    <div class="refreshDiv">
+                        <button class="btn refresh" id="refreshOne" onclick="refreshWall(0)">REFRESH</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WALL TWO -->
+            <div class="wallArea" id="wallAreaTwo">
+                <div class="wallTitle" id="titleTwo">
+                    <p>Antibagno</p>
+                    <h3>02</h3>
+                </div>
+                <div class="wallDiv" id="divTwo">
+                    <svg class="wallSvg" id="svgTwo" xmlns="http://www.w3.org/2000/svg">
+                        <!-- <rect x="0" y="0" width="1400" height="3200" fill="#666" /> -->
+                        <g class="tilesGroup" id="tilesTwo"></g>
+                        <g id="contourGroup">
+                            <polygon class="whiteWall" points="0,0 0,3200 1600,3200 1600,0 1560,0 1560,200 800,200 800,3100 170,3100 170,0" style="fill:#FFF;stroke:#FFF;stroke-width:7pt;;opacity: 0.85;" />
+                            <polygon points="170,0 170,3100 800,3100 800,200 1560,200 1560,0" style="fill:none;stroke:#FFF;stroke-width:5pt" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="wallSettings" id="settingsTwo">
+                    <div class="wallInfoDiv">
+                        <div class="uniqueInfoDiv">
+                            <div class="infoTitle">Superficie netta: </div>
+                            <div class="nettoSurface" id="nettoSurfaceTwo">2.11</div>
+                            <div class="infoUnit"> m<sup>2</sup></div>
+                        </div>
+                        <div class="uniqueInfoDiv">
+                            <div class="infoTitle">Superficie lorda: </div>
+                            <div class="grossSurface" id="grossSurfaceTwo"></div>
+                            <div class="infoUnit"> m<sup>2</sup></div>
+                        </div>
+                        <div class="uniqueInfoDiv">
+                            <div class="infoTitle">Quantitá: </div>
+                            <div class="numTiles" id="numTilesTwo"></div>
+                            <div class="infoUnit"> p.zi</div>
+                        </div>
+                    </div>
+                    <tc-range-slider class="colorSlider" id="sliderTwo"
+                    min="0.00"
+                    max="1.00"
+                    value1="0.45"
+                    value2="0.55"></tc-range-slider>
+                    <div class="refreshDiv">
+                        <button class="btn refresh" id="refreshTwo" onclick="refreshWall(1)">REFRESH</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WALL THREE -->
+            <div class="wallArea" id="wallAreaThree">
+                <div class="wallTitle" id="titleThree">
+                    <p>Bagno</p>
+                    <h3>11</h3>
+                </div>
+                <div class="wallDiv" id="divThree">
+                    <svg class="wallSvg" id="svgThree" xmlns="http://www.w3.org/2000/svg">
+                        <!-- <rect x="0" y="0" width="1400" height="3200" fill="#666" /> -->
+                        <g class="tilesGroup" id="tilesThree"></g>
+                        <g id="contourGroup">
+                            <polygon class="whiteWall" points="0,0 0,3200 1600,3200 1600,0 1430,0 1430,3100 800,3100 800,200 40,200 40,0" style="fill:#FFF;stroke:#FFF;stroke-width:7pt;;opacity: 0.85;" />
+                            <polygon points="40,0 40,200 800,200 800,3100 1430,3100 1430,0" style="fill:none;stroke:#FFF;stroke-width:5pt" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="wallSettings" id="settingsThree">
+                    <div class="wallInfoDiv">
+                        <div class="uniqueInfoDiv">
+                            <div class="infoTitle">Superficie netta: </div>
+                            <div class="nettoSurface" id="nettoSurfaceThree">2.11</div>
+                            <div class="infoUnit"> m<sup>2</sup></div>
+                        </div>
+                        <div class="uniqueInfoDiv">
+                            <div class="infoTitle">Superficie lorda: </div>
+                            <div class="grossSurface" id="grossSurfaceThree"></div>
+                            <div class="infoUnit"> m<sup>2</sup></div>
+                        </div>
+                        <div class="uniqueInfoDiv">
+                            <div class="infoTitle">Quantitá: </div>
+                            <div class="numTiles" id="numTilesThree"></div>
+                            <div class="infoUnit"> p.zi</div>
+                        </div>
+                    </div>
+                    <tc-range-slider class="colorSlider" id="sliderThree"
+                    min="0.00"
+                    max="1.00"
+                    value1="0.45"
+                    value2="0.55"></tc-range-slider>
+                    <div class="refreshDiv">
+                        <button class="btn refresh" id="refreshThree" onclick="refreshWall(2)">REFRESH</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WALL FOUR -->
+            <div class="wallArea" id="wallAreaFour">
+                <div class="wallTitle" id="titleFour">
+                    <p>Bagno</p>
+                    <h3>12</h3>
+                </div>
+                <div class="wallDiv" id="divFour">
+                    <svg class="wallSvg" id="svgFour" xmlns="http://www.w3.org/2000/svg">
+                        <!-- <rect x="0" y="0" width="1400" height="3200" fill="#666" /> -->
+                        <g class="tilesGroup" id="tilesFour"></g>
+                        <g id="contourGroup">
+                            <polygon class="whiteWall" points="0,0 0,3200 1400,3200 1400,3100 15,3100 15,0" style="fill:#FFF;stroke:#FFF;stroke-width:7pt;opacity: 0.85;" />
+                            <polygon points="15,0 15,3100 1400,3100 1400,0" style="fill:none;stroke:#FFF;stroke-width:5pt" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="wallSettings" id="settingsFour">
+                    <div class="wallInfoDiv">
+                        <div class="uniqueInfoDiv">
+                            <div class="infoTitle">Superficie netta: </div>
+                            <div class="nettoSurface" id="nettoSurfaceFour">4.29</div>
+                            <div class="infoUnit"> m<sup>2</sup></div>
+                        </div>
+                        <div class="uniqueInfoDiv">
+                            <div class="infoTitle">Superficie lorda: </div>
+                            <div class="grossSurface" id="grossSurfaceFour"></div>
+                            <div class="infoUnit"> m<sup>2</sup></div>
+                        </div>
+                        <div class="uniqueInfoDiv">
+                            <div class="infoTitle">Quantitá: </div>
+                            <div class="numTiles" id="numTilesFour"></div>
+                            <div class="infoUnit"> p.zi</div>
+                        </div>
+                    </div>
+                    <tc-range-slider class="colorSlider" id="sliderFour"
+                    min="0.00"
+                    max="1.00"
+                    value1="0.65"
+                    value2="0.75"></tc-range-slider>
+                    <div class="refreshDiv">
+                        <button class="btn refresh" id="refreshFour" onclick="refreshWall(3)">REFRESH</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GENERAL SETTINGS DIV -->
+            <div class="generalSettings">
+
+                <div class="mainTitleDiv" id="mainTitle">
+                    <h1>Bagno PT</h1>
+                </div>
+                <div id="tilesFormat">
+                    <h5>Formato</h5>
+                    <button class="format" id="btnFormat_10" style="width: 30px; height: 30px; vertical-align: bottom;">10/10</button>
+                    <button class="format" id="btnFormat_20" style="width: 60px; height: 60px; vertical-align: bottom;">20/20</button>
+                    <div class="allWallsInfoDiv">
+                        <div class="totalInfoDiv">
+                            <div class="totalInfoTitle">Area netta totale: </div>
+                            <div class="totalInfoValue" id="nettoSurfaceFour">10,59</div>
+                            <div class="totalInfoUnit"> m<sup>2</sup></div>
+                        </div>
+                        <div class="totalInfoDiv">
+                            <div class="totalInfoTitle">Area lorda totale: </div>
+                            <div class="totalInfoValue" id="totalGrossSurface"></div>
+                            <div class="totalInfoUnit"> m<sup>2</sup></div>
+                        </div>
+                        <div class="totalInfoDiv">
+                            <div class="totalInfoTitle">Quantitá totale: </div>
+                            <div class="totalInfoValue" id="totalNumTiles"></div>
+                            <div class="totalInfoUnit"> p.zi</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="whiteWallOpacity">
+                    <h5>Opacità cover-wall</h5>
+                    <tc-range-slider class="opacitySlider" id="opacitySlider"
+                    min="0.00"
+                    max="1.00"
+                    value1="0.85"
+                    slider-width="10vw"
+                    step="0.01"></tc-range-slider>
+                </div>
+                <div class="saveAllDiv" id="saveAll">
+                    <button class="btn saveAll" id="saveAllSvgBtn">SVG</button>
+                    <button class="btn saveAll" id="saveAllPngBtn">PNG</button>
+                    <button class="btn saveAll" id="saveAllTxtBtn">TXT</button>
+                </div>
+            </div>
+        </div>
+    </body>
+
+
+    <script type='text/javascript'>
+
+        // CONSTANTS
+        // ########################################################
+        const svgns = 'http://www.w3.org/2000/svg';
+
+        // NEUTROS
+        const ERDE = '#62564D';
+        const KHAKI = '#A79E81';
+        const ELFENBEIN = '#F0E8DA';
+        const WEISS = '#FEFEFD';
+        // REDS
+        const MAHAGONI = '#61423A';
+        const BORDEAUX = '#9A5B4D';
+        const ROT = '#C57361';
+        const ROSA = '#EEC4BA';
+        const PUDER = '#F2D9D3';
+        // BLUES
+        const NACHTBLAU = '#384654';
+        const JEANS = '#667B8A';
+        const STAHL = '#A4B4BF';
+        const HELLBLAU = '#AACEE1';
+
+        // Object to map color codes to names
+        const colorMap = {
+            "#61423A": "MAHAGONI",
+            "#9A5B4D": "BORDEAUX",
+            "#C57361": "ROT",
+            "#EEC4BA": "ROSA",
+
+            '#384654': 'NACHTBLAU',
+            '#667B8A': 'JEANS',
+            '#A4B4BF': 'STAHL',
+            '#AACEE1': 'HELLBLAU',
+
+            "#F2D9D3": "PUDER",
+
+            '#62564D': 'ERDE',
+            '#A79E81': 'KHAKI',
+            '#F0E8DA': 'ELFENBEIN',
+            '#FEFEFD': 'WEISS',
+        };
+
+        // The order in which colors should appear
+        const orderedKeys = [
+            "MAHAGONI-BORDEAUX", // 01
+            "MAHAGONI-ROT", // 02
+            "MAHAGONI-ROSA", // 03
+            "MAHAGONI-PUDER", // 04
+            "MAHAGONI-KHAKI", // 05
+            "MAHAGONI-ELFENBEIN", // 06
+            "MAHAGONI-WEISS", // 07
+
+            "BORDEAUX-ROT", // 08
+            "BORDEAUX-ROSA", // 09
+            "BORDEAUX-PUDER", // 10
+            "BORDEAUX-ERDE", // 11
+            "BORDEAUX-KHAKI", // 12
+            "BORDEAUX-ELFENBEIN", // 13
+            "BORDEAUX-WEISS", // 14
+
+            "ROT-ROSA", // 15
+            "ROT-PUDER", // 16
+            "ROT-KHAKI", // 17
+            "ROT-ELFENBEIN", // 18
+            "ROT-WEISS", // 19
+
+            "ROSA-KHAKI", // 20
+            "ROSA-ELFENBEIN", // 21
+            "ROSA-WEISS", // 22
+
+            "PUDER-ERDE", // 23
+            "PUDER-KHAKI", // 24
+            "PUDER-ELFENBEIN", // 25
+            "PUDER-WEISS", // 26
+
+            "NACHTBLAU-JEANS", // 27
+            "NACHTBLAU-STAHL", // 28
+            "NACHTBLAU-HELLBLAU", // 29
+            "NACHTBLAU-PUDER", // 30
+            "NACHTBLAU-KHAKI", // 31
+            "NACHTBLAU-ELFENBEIN", // 32
+            "NACHTBLAU-WEISS", // 33
+
+            "JEANS-STAHL", // 34
+            "JEANS-HELLBLAU", // 35
+            "JEANS-PUDER", // 36
+            "JEANS-ERDE", // 37
+            "JEANS-KHAKI", // 38
+            "JEANS-ELFENBEIN", // 39
+            "JEANS-WEISS", // 40
+
+            "STAHL-HELLBLAU", // 41
+            "STAHL-PUDER", // 42
+            "STAHL-ERDE", // 43
+            "STAHL-KHAKI", // 44
+            "STAHL-ELFENBEIN", // 45
+            "STAHL-WEISS", // 46
+
+            "HELLBLAU-PUDER", // 47
+            "HELLBLAU-ERDE", // 48
+            "HELLBLAU-KHAKI", // 49
+            "HELLBLAU-ELFENBEIN", // 50
+            "HELLBLAU-WEISS", // 51
+
+            "BORDEAUX-JEANS", // 52
+            "BORDEAUX-HELLBLAU", // 53
+
+            "ROT-NACHTBLAU", // 54
+            "ROT-JEANS", // 55
+            "ROT-STAHL", // 56
+            "ROT-HELLBLAU", // 57
+
+            "ROSA-JEANS", // 58
+            "ROSA-STAHL", // 59
+            "ROSA-HELLBLAU", // 60
+        ];
+
+        // WEIGHTS FOR ColorCombiFamily
+        const p = 10;
+        const m = 4;
+        const l = 8; // for reduced prob
+        const f = 10;
+
+        const redCombis = [
+            [MAHAGONI, BORDEAUX, p], // 01
+            [MAHAGONI, ROT, p], // 02
+            [MAHAGONI, ROSA, p], // 03
+            [MAHAGONI, PUDER, p], // 04
+            [BORDEAUX, ROT, p], // 05
+            [BORDEAUX, ROSA, p], // 06
+            [BORDEAUX, PUDER, p], // 07
+            [ROT, ROSA, p], // 08
+            [ROT, PUDER, p], // 09
+            [PUDER, ERDE, p], // 10
+
+            [MAHAGONI, KHAKI, p / f], // 11
+            [MAHAGONI, ELFENBEIN, p / f], // 12
+            [MAHAGONI, WEISS, p / f], // 13
+            [BORDEAUX, ERDE, p / f], // 14
+            [BORDEAUX, KHAKI, p / f], // 15
+            [BORDEAUX, ELFENBEIN, p / f], // 16
+            [BORDEAUX, WEISS, p / f], // 17
+            [ROT, KHAKI, p / f], // 18
+            [ROT, ELFENBEIN, p / f], // 19
+            [ROT, WEISS, p / f], // 20
+            [ROSA, KHAKI, (p + m) / f], // +++ // 21
+            [ROSA, ELFENBEIN, p / f], // 22
+            [ROSA, WEISS, p / f], // 23
+            [PUDER, KHAKI, (p + m) / f], // +++ // 24
+            [PUDER, ELFENBEIN, p / f], // 25
+            [PUDER, WEISS, p / f], // 26
+        ];
+        const blueCombis = [
+            [NACHTBLAU, JEANS, p], // 27
+            [NACHTBLAU, STAHL, p], // 28
+            [NACHTBLAU, HELLBLAU, p], // 29
+            [NACHTBLAU, PUDER, p - l], // --- // 30
+            [JEANS, STAHL, p], // 31
+            [JEANS, HELLBLAU, p], // 32
+            [JEANS, PUDER, p - l], // --- // 33
+            [STAHL, HELLBLAU, p], // 34
+            [STAHL, PUDER, p - l], // --- // 35
+            [HELLBLAU, PUDER, p - l], // --- // 36
+
+            [NACHTBLAU, KHAKI, p / f], // 37
+            [NACHTBLAU, ELFENBEIN, p / f], // 38
+            [NACHTBLAU, WEISS, p / f], // 39
+            [JEANS, ERDE, p / f], // 40
+            [JEANS, KHAKI, p / f], // 41
+            [JEANS, ELFENBEIN, p / f], // 42
+            [JEANS, WEISS, p / f], // 43
+            [STAHL, ERDE, p / f], // 44
+            [STAHL, KHAKI, p / f], // 45
+            [STAHL, ELFENBEIN, p / f], // 46
+            [STAHL, WEISS, p / f], // 47
+            [HELLBLAU, ERDE, p / f], // 48
+            [HELLBLAU, KHAKI, p / f], // 49
+            [HELLBLAU, ELFENBEIN, p / f], // 50
+            [HELLBLAU, WEISS, p / f], // 51
+        ];
+        const redBlueCombis = [
+            [NACHTBLAU, ROT, p + m], // +++ // 52
+            // [NACHTBLAU, PUDER, p], // 53
+            [JEANS, BORDEAUX, p], // 54
+            [JEANS, ROT, p], // 55
+            [JEANS, ROSA, p], // 56
+            // [JEANS, PUDER, p], // 57
+            [STAHL, ROT, p], // 58
+            [STAHL, ROSA, p], // 59
+            // [STAHL, PUDER, p], // 60
+            [HELLBLAU, BORDEAUX, p + m], // +++ // 61
+            [HELLBLAU, ROT, p + m], // +++ // 62
+            [HELLBLAU, ROSA, p], // 63
+            // [HELLBLAU, PUDER, p], // 63
+        ];
+
+
+
+        // COLOR COMBIS COUNT OBJECT
+        let colorCombisCount = [];
+
+        // Number of Tiles
+        let numTiles = [0, 0, 0, 0];
+
+        // SIZES
+        const widths = [800, 1600, 1600, 1400];
+        const height = 3200;
+        let u = 200; // mm
+
+        // COLOR COMBIS SLIEDERS
+        const thumbScale = 10;
+        const thumbSum = 10;
+        const sliders = document.getElementsByClassName('colorSlider');
+        for (i = 0; i < sliders.length; i++) {
+
+            sliders[i].setAttribute("slider-width", "15vw");
+            sliders[i].setAttribute("step", "0.01");
+
+            let pos = (sliders[i].value1 + ((sliders[i].value2 - sliders[i].value1) / 2)) * 100.0;
+            sliders[i].sliderBg = `linear-gradient( 90deg, #C57361 0%, #C57361 ${pos}%, #AACEE1 ${pos}%, #AACEE1 100%)`;
+
+            // Pointer1
+            sliders[i].setAttribute("pointer-width", `${sliders[i].value1 * thumbScale + thumbSum}px`);
+            sliders[i].setAttribute("pointer-height", `${sliders[i].value1 * thumbScale + thumbSum}px`);
+            sliders[i].setAttribute("pointer-radius", "100%");
+
+            sliders[i].setAttribute("pointer-bg", '#FFF');
+            sliders[i].setAttribute("pointer-bg-hover", '#FFF');
+            sliders[i].setAttribute("pointer-bg-focus", '#FFF');
+            sliders[i].setAttribute("pointer-border", `2px solid ${ROT}`);
+            sliders[i].setAttribute("pointer-border-hover", `3px solid ${ROT}`);
+            sliders[i].setAttribute("pointer-border-focus", `3px solid ${ROT}`);
+            sliders[i].setAttribute("pointer-shadow", '0 0 0 #000');
+            sliders[i].setAttribute("pointer-shadow-hover", '0 0 0 #000');
+            sliders[i].setAttribute("pointer-shadow-focus", '0 0 0 #000');
+
+            // Pointer2
+            sliders[i].setAttribute("pointer2-width", `${sliders[i].value2 * thumbScale + thumbSum}px`);
+            sliders[i].setAttribute("pointer2-height", `${sliders[i].value2 * thumbScale + thumbSum}px`);
+            sliders[i].setAttribute("pointer2-radius", "100%");
+
+            sliders[i].setAttribute("pointer2-bg", '#FFF');
+            sliders[i].setAttribute("pointer2-bg-hover", '#FFF');
+            sliders[i].setAttribute("pointer2-bg-focus", '#FFF');
+            sliders[i].setAttribute("pointer2-border", `2px solid ${HELLBLAU}`);
+            sliders[i].setAttribute("pointer2-border-hover", `3px solid ${HELLBLAU}`);
+            sliders[i].setAttribute("pointer2-border-focus", `3px solid ${HELLBLAU}`);
+            sliders[i].setAttribute("pointer2-shadow", '0 0 0 #000');
+            sliders[i].setAttribute("pointer2-shadow-hover", '0 0 0 #000');
+            sliders[i].setAttribute("pointer2-shadow-focus", '0 0 0 #000');
+        };
+
+        sliders[0].addEventListener('change', (evt) => {
+            let pos = (evt.detail.value1 + ((evt.detail.value2 - evt.detail.value1) / 2)) * 100.0;
+            sliders[0].sliderBg = `linear-gradient( 90deg, #C57361 0%, #C57361 ${pos}%, #AACEE1 ${pos}%, #AACEE1 100%)`;
+            
+            sliders[0].setAttribute("pointer1-width", `${evt.detail.value1 * thumbScale + thumbSum}px`);
+            sliders[0].setAttribute("pointer1-height", `${evt.detail.value1 * thumbScale + thumbSum}px`);
+            sliders[0].setAttribute("pointer1-radius", "100%");
+
+            sliders[0].setAttribute("pointer2-width", `${(1 - evt.detail.value2) * thumbScale + thumbSum}px`);
+            sliders[0].setAttribute("pointer2-height", `${(1 - evt.detail.value2) * thumbScale + thumbSum}px`);
+            sliders[0].setAttribute("pointer2-radius", "100%");
+
+            let redWeight = evt.detail.value1;
+            let blueWeight = 1 - evt.detail.value2;
+            let redBlueWeight = evt.detail.value2 - evt.detail.value1;
+            
+            drawWall(0, svgTilesGroups[0], widths[0], height, redWeight, blueWeight, redBlueWeight);
+        });
+
+        sliders[1].addEventListener('change', (evt) => {
+            let pos = (evt.detail.value1 + ((evt.detail.value2 - evt.detail.value1) / 2)) * 100.0;
+            sliders[1].sliderBg = `linear-gradient( 90deg, #C57361 0%, #C57361 ${pos}%, #AACEE1 ${pos}%, #AACEE1 100%)`;
+            
+            sliders[1].setAttribute("pointer1-width", `${evt.detail.value1 * thumbScale + thumbSum}px`);
+            sliders[1].setAttribute("pointer1-height", `${evt.detail.value1 * thumbScale + thumbSum}px`);
+            sliders[1].setAttribute("pointer1-radius", "100%");
+
+            sliders[1].setAttribute("pointer2-width", `${(1 - evt.detail.value2) * thumbScale + thumbSum}px`);
+            sliders[1].setAttribute("pointer2-height", `${(1 - evt.detail.value2) * thumbScale + thumbSum}px`);
+            sliders[1].setAttribute("pointer2-radius", "100%");
+
+            let redWeight = evt.detail.value1;
+            let blueWeight = 1 - evt.detail.value2;
+            let redBlueWeight = evt.detail.value2 - evt.detail.value1;
+            
+            drawWall(1, svgTilesGroups[1], widths[1], height, redWeight, blueWeight, redBlueWeight);
+        });
+
+        sliders[2].addEventListener('change', (evt) => {
+            let pos = (evt.detail.value1 + ((evt.detail.value2 - evt.detail.value1) / 2)) * 100.0;
+            sliders[2].sliderBg = `linear-gradient( 90deg, #C57361 0%, #C57361 ${pos}%, #AACEE1 ${pos}%, #AACEE1 100%)`;
+            
+            sliders[2].setAttribute("pointer1-width", `${evt.detail.value1 * thumbScale + thumbSum}px`);
+            sliders[2].setAttribute("pointer1-height", `${evt.detail.value1 * thumbScale + thumbSum}px`);
+            sliders[2].setAttribute("pointer1-radius", "100%");
+
+            sliders[2].setAttribute("pointer2-width", `${(1 - evt.detail.value2) * thumbScale + thumbSum}px`);
+            sliders[2].setAttribute("pointer2-height", `${(1 - evt.detail.value2) * thumbScale + thumbSum}px`);
+            sliders[2].setAttribute("pointer2-radius", "100%");
+
+            let redWeight = evt.detail.value1;
+            let blueWeight = 1 - evt.detail.value2;
+            let redBlueWeight = evt.detail.value2 - evt.detail.value1;
+            
+            drawWall(2, svgTilesGroups[2], widths[2], height, redWeight, blueWeight, redBlueWeight);
+        });
+
+        sliders[3].addEventListener('change', (evt) => {
+            let pos = (evt.detail.value1 + ((evt.detail.value2 - evt.detail.value1) / 2)) * 100.0;
+            sliders[3].sliderBg = `linear-gradient( 90deg, #C57361 0%, #C57361 ${pos}%, #AACEE1 ${pos}%, #AACEE1 100%)`;
+            
+            sliders[3].setAttribute("pointer1-width", `${evt.detail.value1 * thumbScale + thumbSum}px`);
+            sliders[3].setAttribute("pointer1-height", `${evt.detail.value1 * thumbScale + thumbSum}px`);
+            sliders[3].setAttribute("pointer1-radius", "100%");
+
+            sliders[3].setAttribute("pointer2-width", `${(1 - evt.detail.value2) * thumbScale + thumbSum}px`);
+            sliders[3].setAttribute("pointer2-height", `${(1 - evt.detail.value2) * thumbScale + thumbSum}px`);
+            sliders[3].setAttribute("pointer2-radius", "100%");
+
+            let redWeight = evt.detail.value1;
+            let blueWeight = 1 - evt.detail.value2;
+            let redBlueWeight = evt.detail.value2 - evt.detail.value1;
+            
+            drawWall(3, svgTilesGroups[3], widths[3], height, redWeight, blueWeight, redBlueWeight);
+        });
+        
+
+
+        // SET VIEWBOX
+        const wallSvgs = document.getElementsByClassName('wallSvg');
+        for (i = 0; i < wallSvgs.length; i++) {
+            wallSvgs[i].setAttribute("viewBox", `0 0 ${widths[i]} ${height}`);
+        };
+
+
+
+        // MAIN
+        let colorCombisResult = {}
+        const svgTilesGroups = document.getElementsByClassName('tilesGroup');
+        for (i = 0; i < svgTilesGroups.length; i++) {
+            
+            let redWeight = sliders[i].value1;
+            let blueWeight = 1 - sliders[i].value2;
+            let redBlueWeight = sliders[i].value2 - sliders[i].value1;
+            
+            drawWall(i, svgTilesGroups[i], widths[i], height, redWeight, blueWeight, redBlueWeight);
+        };
+
+
+        // WALLS INFOS
+        // --- GROSS SURFACE
+        const grossSurfaceSpans = document.getElementsByClassName("grossSurface");
+        for (i = 0; i < grossSurfaceSpans.length; i ++) {
+            if (u == 100) {
+                grossSurfaceSpans[i].innerHTML = `${numTiles[i] * 0.01}`;
+            } else if (u == 200) {
+                grossSurfaceSpans[i].innerHTML = `${numTiles[i] * 0.04}`;
+            };
+        };
+        // --- TOTAL GROSS SURFACE
+        const totalGrossSurface = document.getElementById("totalGrossSurface");
+        totalGrossSurface.innerHTML = ((numTiles[0] + numTiles[1] + numTiles[2] + numTiles[3]) * Math.pow((u / 1000), 2)).toFixed(2);
+
+        // --- NUMBER OF TILES
+        const numTilesSpans = document.getElementsByClassName("numTiles");
+        for (i = 0; i < numTilesSpans.length; i ++) {
+            numTilesSpans[i].innerHTML = `${numTiles[i]}`;
+        };
+        // --- TOTAL NUMBER OF TILES
+        const totalNumTiles = document.getElementById("totalNumTiles");
+        totalNumTiles.innerHTML = (numTiles[0] + numTiles[1] + numTiles[2] + numTiles[3]);
+
+        
+
+        // REFRESH
+        function refreshWall(i) {
+            let redWeight = sliders[i].value1;
+            let blueWeight = 1 - sliders[i].value2;
+            let redBlueWeight = sliders[i].value2 - sliders[i].value1;
+            
+            drawWall(i, svgTilesGroups[i], widths[i], height, redWeight, blueWeight, redBlueWeight);
+        }
+
+
+        // UTILS
+        function drawWall(i, svgTilesGroup, w, h, redWeight, blueWeight, redBlueWeight) {
+
+            const nx = Math.round(w / u);
+            const ny = Math.round(h / u);
+
+            let colorCombis = [];
+
+            for (intX = 0; intX < nx; intX++) {
+                for (intY = 0; intY < ny; intY++) {
+                    
+                    let x = intX * u;
+                    let y = intY * u;
+
+                    let colorCombiFamily, colorCombi;
+                    colorCombiFamily = weightedChoice(
+                        [ redCombis, blueCombis, redBlueCombis ],
+                        [ redWeight, blueWeight, redBlueWeight ]
+                    );
+                    colorCombi = weightedChoice(
+                        colorCombiFamily.map(subArray => subArray.slice(0, 2)),
+                        colorCombiFamily.map(subArray => subArray[subArray.length - 1])
+                    );
+                    
+                    let base = document.createElementNS(svgns, 'rect');
+                    base.setAttribute('x', `${x}`);
+                    base.setAttribute('y', `${y}`);
+                    base.setAttribute('width', `${u}`);
+                    base.setAttribute('height', `${u}`);
+                    base.setAttribute('fill', colorCombi[0]);
+                    svgTilesGroup.appendChild(base);
+
+                    let rot = Math.floor(Math.random() * 2);
+                    let triangle = document.createElementNS(svgns, 'polygon');
+
+                    if (rot === 0) {
+                        triangle.setAttribute('points', `${x} ${y} ${x + u} ${y} ${x} ${y + u} ${x} ${y}`);
+                    } else {
+                        triangle.setAttribute('points', `${x} ${y} ${x + u} ${y} ${x + u} ${y + u} ${x} ${y}`);
+                    };
+
+                    triangle.setAttribute('stroke', 'none');
+                    triangle.setAttribute('stroke-width', '0');
+                    triangle.setAttribute('fill', colorCombi[1]);
+                    svgTilesGroup.appendChild(triangle);
+
+                    if (u == 200) {
+                        if (
+                            (i == 0) ||
+                            (i == 1 && intY == 0) ||
+                            (i == 1 && intX < 4) ||
+                            (i == 2 && intY == 0) ||
+                            (i == 2 && intX > 3) ||
+                            (i == 3)
+                        ) {
+                            // svgTilesGroup.appendChild(base);
+                            // svgTilesGroup.appendChild(triangle);
+                            colorCombis.push(formatColorCombiArray(colorCombi));
+                        }
+                    } else if (u == 100) {
+                        if (
+                            (i == 0 && (intX < 7 && intY < 31)) ||
+                            (i == 1 && ((intX > 0 && intX < 8 && intY < 31) || (intX >= 8 && intY < 2))) ||
+                            (i == 2 && ((intX < 8 && intY < 2) || (intX >= 8 && intX < 15 && intY < 31))) ||
+                            (i == 3 && intY < 31)
+                        ) {
+                            // svgTilesGroup.appendChild(base);
+                            // svgTilesGroup.appendChild(triangle);
+                            colorCombis.push(formatColorCombiArray(colorCombi));
+                        };
+                    };
+                };
+            };
+
+
+
+            // colorCombisCount[i] = colorCombis;
+            colorCombisCount[i] = countItemsInOrder(colorCombis);
+            numTiles[i] = sumValues(colorCombisCount[i]);
+
+            // console.log(`Muro ${i}:`);
+            // console.log(colorCombis);
+            // console.log('\n');
+
+
+            const jointsStroke = '2.2pt';
+            for (x = 0; x < w - u + 1; x += u) {
+                const vline = document.createElementNS('http://www.w3.org/2000/svg','line');
+                vline.setAttribute('x1', `${x}`);
+                vline.setAttribute('y1', '0');
+                vline.setAttribute('x2', `${x}`);
+                vline.setAttribute('y2', `${h}`);
+                vline.setAttribute('stroke', '#FAFAFA');
+                vline.setAttribute('stroke-width', jointsStroke);
+                svgTilesGroup.appendChild(vline); // TODO: apply to other group not this
+            };
+
+            for (y = 0; y < h - u + 1; y += u) {
+                const hline = document.createElementNS('http://www.w3.org/2000/svg','line');
+                hline.setAttribute('x1', '0');
+                hline.setAttribute('y1', `${y}`);
+                hline.setAttribute('x2', `${w}`);
+                hline.setAttribute('y2', `${y}`);
+                hline.setAttribute('stroke', '#FAFAFA');
+                hline.setAttribute('stroke-width', jointsStroke);
+                svgTilesGroup.appendChild(hline); // TODO: apply to other group not this
+            };
+
+            // return colorCombis;
+        }
+
+        function weightedChoice(items, weights) {
+            // Create cumulative distribution
+            let cumulativeWeights = [];
+            let totalWeight = 0;
+
+            for (let i = 0; i < weights.length; i++) {
+                totalWeight += weights[i];
+                cumulativeWeights[i] = totalWeight;
+            };
+
+            // Generate random number in the range [0, totalWeight)
+            const random = Math.random() * totalWeight;
+
+            // Select an item based on the random number
+            for (let i = 0; i < cumulativeWeights.length; i++) {
+                if (random < cumulativeWeights[i]) {
+                    return items[i];
+                };
+            };
+        }
+        
+        function formatColorCombiArray(colorCombi) {
+            // Get the order of the colors from the colorMap
+            const colorOrder = Object.keys(colorMap);
+
+            // Sort the colors in the array based on their position in colorOrder
+            const sortedColors = colorCombi.sort((a, b) => colorOrder.indexOf(a) - colorOrder.indexOf(b));
+
+            // Map the sorted colors to their corresponding names from colorMap
+            const colorNames = sortedColors.map(color => colorMap[color]);
+
+            // Combine the names into a single string with a "-" separator
+            return colorNames.join("-");
+        }
+
+        function getFormattedDateTitle(date, string, format) {
+
+            // Format each part of the date
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+
+            // Combine to the desired format: YYYYMMDD-HHMMSS
+            const formattedDateTime = `${year}${month}${day}-${hours}${minutes}${seconds}`;
+
+            // Append the string "muro1.png"
+            return `${formattedDateTime}_ASC_${string}.${format}`;
+        }
+
+        function countItemsInOrder(arr) {
+            const count = arr.reduce((acc, item) => {
+                acc[item] = (acc[item] || 0) + 1;
+                return acc;
+            }, {});
+
+            const order = orderedKeys;
+            const orderedCount = {};
+
+            order.forEach(item => {
+                if (count[item]) {
+                orderedCount[item] = count[item];
+                }
+            });
+
+            return orderedCount;
+        }
+
+        function sumValues(obj) {
+            return Object.values(obj).reduce((sum, value) => sum + value, 0);
+        }
+
+        function sumDifferentColorCombinations(colorCombisCount) {
+            const result = {};
+
+            // Loop through each object in the array
+            colorCombisCount.forEach(combination => {
+                // Loop through each key-value pair in the object
+                for (const [key, value] of Object.entries(combination)) {
+                    // If the key already exists, add the value; otherwise, initialize it
+                    if (result[key]) {
+                        result[key] += value;
+                    } else {
+                        result[key] = value;
+                    }
+                }
+            });
+
+            return result;
+        }
+
+
+        // PARAMS
+        // ---------------------------------------------------------------
+
+        // TILES FORMAT
+        const btnFormat_10 = document.getElementById('btnFormat_10');
+        const btnFormat_20 = document.getElementById('btnFormat_20');
+        btnFormat_20.style.border = "2pt solid #000"
+
+        btnFormat_10.addEventListener("click", () => {
+            btnFormat_10.style.border = "2pt solid #000"
+            btnFormat_20.style.border = "1pt solid #000"
+
+            u = 100;
+            colorCombisResult = {}
+
+            for (i = 0; i < svgTilesGroups.length; i++) {
+                svgTilesGroups[i].replaceChildren();
+                let redWeight = sliders[i].value1;
+                let blueWeight = 1 - sliders[i].value2;
+                let redBlueWeight = sliders[i].value2 - sliders[i].value1;
+            
+                drawWall(i, svgTilesGroups[i], widths[i], height, redWeight, blueWeight, redBlueWeight);
+            };
+
+            for (i = 0; i < grossSurfaceSpans.length; i ++) {
+                grossSurfaceSpans[i].innerHTML = `${numTiles[i] * 0.01}`;
+            };
+            totalGrossSurface.innerHTML = ((numTiles[0] + numTiles[1] + numTiles[2] + numTiles[3]) * Math.pow((u / 1000), 2)).toFixed(2);
+
+            for (i = 0; i < numTilesSpans.length; i ++) {
+                numTilesSpans[i].innerHTML = `${numTiles[i]}`;
+            };
+            totalNumTiles.innerHTML = (numTiles[0] + numTiles[1] + numTiles[2] + numTiles[3]);
+        });
+
+        btnFormat_20.addEventListener("click", () => {
+            btnFormat_20.style.border = "2pt solid #000"
+            btnFormat_10.style.border = "1pt solid #000"
+
+            u = 200;
+            colorCombisResult = {}
+
+            for (i = 0; i < svgTilesGroups.length; i++) {
+                svgTilesGroups[i].replaceChildren();
+                let redWeight = sliders[i].value1;
+                let blueWeight = 1 - sliders[i].value2;
+                let redBlueWeight = sliders[i].value2 - sliders[i].value1;
+            
+                drawWall(i, svgTilesGroups[i], widths[i], height, redWeight, blueWeight, redBlueWeight);
+            };
+
+            for (i = 0; i < grossSurfaceSpans.length; i ++) {
+                grossSurfaceSpans[i].innerHTML = `${numTiles[i] * 0.04}`;
+            };
+            totalGrossSurface.innerHTML = ((numTiles[0] + numTiles[1] + numTiles[2] + numTiles[3]) * Math.pow((u / 1000), 2)).toFixed(2);
+
+            for (i = 0; i < numTilesSpans.length; i ++) {
+                numTilesSpans[i].innerHTML = `${numTiles[i]}`;
+            };
+            totalNumTiles.innerHTML = (numTiles[0] + numTiles[1] + numTiles[2] + numTiles[3]);
+        });
+
+
+
+        // WHITE WALLS OPACITY
+        const whiteWalls = document.getElementsByClassName("whiteWall");
+        
+
+        const opacitySlider = document.getElementById('opacitySlider');
+        opacitySlider.addEventListener('change', (evt) => {
+            for (i = 0; i < whiteWalls.length; i++) {
+                // console.log(whiteWalls[i].style.opacity);
+                whiteWalls[i].style.opacity = evt.detail.value1;
+            };
+        });
+        
+
+        // SAVE ALL SVG
+        const saveAllSvgBtn = document.getElementById('saveAllSvgBtn');
+
+        let triggerSvgDownload = (imgURI, fileName) => {
+            let a = document.createElement('a');
+
+            a.setAttribute('download', fileName);
+            a.setAttribute('href', imgURI);
+            a.setAttribute('target', '_blank');
+
+            a.click();
+        }
+
+        let saveAllSvg = () => {
+            const dt = new Date();
+            for (i = 0; i < wallSvgs.length; i++) {
+                let num = i + 1;
+                let data = (new XMLSerializer()).serializeToString(wallSvgs[i]);
+                let svgBlob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
+                let url = URL.createObjectURL(svgBlob);
+
+                let fileName = getFormattedDateTitle(dt, `muro${num}`, 'svg');
+                triggerSvgDownload(url, fileName);
+            };
+        }
+
+        saveAllSvgBtn.addEventListener('click', saveAllSvg);
+
+        // SAVE ALL PNG
+        const saveAllPngBtn = document.getElementById('saveAllPngBtn');
+
+        function saveAllPng() {
+            const dt = new Date();
+            let scale = 30;
+            for (i = 0; i < wallSvgs.length; i++) {
+                let num = i + 1;
+                // Create a canvas element
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+
+                let BCR = wallSvgs[i].getBoundingClientRect();
+                wallSvgs[i].setAttribute('width', BCR.width);
+                wallSvgs[i].setAttribute('height',BCR.height);
+                // Set canvas size to match SVG size
+                const svgWidth = BCR.width * scale; // widths[i] * scale;
+                const svgHeight = BCR.height * scale; //height * scale;
+                canvas.width = svgWidth;
+                canvas.height = svgHeight;
+
+                // Create an image element
+                const img = new Image();
+
+                // Get SVG data as a string
+                const svgData = new XMLSerializer().serializeToString(wallSvgs[i]);
+
+                // Create a data URI for the SVG
+                const svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+                const url = URL.createObjectURL(svgBlob);
+
+                // Load the SVG into the image element
+                img.onload = function () {
+                    // Scale the drawing to fit the canvas
+                    ctx.scale(scale, scale);
+
+                    // Draw the image (SVG) onto the canvas
+                    ctx.drawImage(img, 0, 0);
+
+                    // Convert the canvas to a PNG data URL
+                    const pngDataUrl = canvas.toDataURL("image/png");
+
+                    // Create a download link
+                    const link = document.createElement("a");
+                    link.href = pngDataUrl;
+
+                    // let fileName = getFormattedDateTitle(`muro%{i+1}`, 'png');
+                    link.download = getFormattedDateTitle(dt, `muro${num}`, 'png');
+
+                    // Trigger the download
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    // Clean up the URL object
+                    URL.revokeObjectURL(url);
+                };
+
+                // Set the image source to the data URI
+                img.src = url;
+            };
+
+        }
+
+        saveAllPngBtn.addEventListener('click', saveAllPng);
+
+        // EXPORT TXT
+        const saveAllTxtBtn = document.getElementById('saveAllTxtBtn');
+
+        function saveAllTxt() {
+
+            const dt = new Date();
+
+            // Convert object to a string format (key-value pairs)
+            let content = 'ASC\n';
+            content += 'Bagno Pian Terreno\n';
+            content += new Date() + '\n';
+            content += '\n';
+            let data = sumDifferentColorCombinations(colorCombisCount);
+            
+            const reorderedData = {};
+
+            // Loop through orderedKeys and add the corresponding values from data
+            orderedKeys.forEach(key => {
+                if (data.hasOwnProperty(key)) {
+                    reorderedData[key] = data[key];
+                }
+            });
+
+            for (const [key, value] of Object.entries(reorderedData)) {
+                content += `${key}: ${value}\n`;
+            }
+
+            content += `total: ${sumValues(reorderedData)}\n`;
+
+            // Create a Blob with the content
+            const blob = new Blob([content], { type: 'text/plain' });
+
+            // Create a link element
+            const link = document.createElement('a');
+            
+            // Set the download attribute with the filename
+            link.download = getFormattedDateTitle(dt, `Ausschreibung`, 'txt');
+            
+            // Create a URL for the Blob and set it as the href attribute
+            link.href = URL.createObjectURL(blob);
+            
+            // Append the link to the document body (invisible)
+            document.body.appendChild(link);
+            
+            // Programmatically click the link to trigger the download
+            link.click();
+            
+            // Remove the link after download
+            document.body.removeChild(link);
+        }
+
+
+
+
+        saveAllTxtBtn.addEventListener('click', saveAllTxt);
+    </script>
+
+</html>
+
+
+
+<!-- 
+    for (i = 0; i < 4; i++) {
+        let itemCount = countItemsInOrder(colorCombisCount[i]);
+            console.log(`Muro ${i + 1}`);
+            console.log(itemCount);
+            console.log('\n');
+    }
+
+
+    for (i = 0; i < 4; i++) {
+        let itemCount = countItemsInOrder(colorCombisCount[i]);
+        let sum = sumValues(itemCount);
+
+        console.log(`Muro ${i + 1}`);
+        console.log(itemCount);
+        console.log(`Piastelle Tot.: ${sum}`);
+        console.log('\n');
+    }
+-->
