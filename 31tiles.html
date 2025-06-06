@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- <meta id="interval" http-equiv="refresh" content="5" /> -->
+        <title>MILA FFA</title>
+        <meta name="description" content="MILA - Fliesen für Alle" />
+        <meta name="author" content="Giacomo Ceccarelli" />
+        <style>
+            body {
+                padding: 0;
+                margin: 0;
+            }
+            .container {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              column-gap: 6vw;
+              flex-wrap: nowrap;
+
+              background-color: #FAFAFA;
+              width: 100vw;
+              height: 100vh;
+            }
+            button {
+                background: transparent;
+                border: 0;
+                outline:0;
+            }
+            .arrow {
+                cursor: pointer;
+                top: 50%;
+                margin-top: -45px;
+                margin-left: -35px;
+            }
+            .left {
+                left: 42%;
+            }
+            .right {
+                left: 58%;
+            }
+            .left:hover polyline,
+            .left:focus polyline {
+                stroke-width: 4;
+            }
+            .left:active polyline {
+                stroke-width: 6;
+                transition: all 100ms ease-in-out;
+            }
+            .right:hover polyline,
+            .right:focus polyline {
+                stroke-width: 4;
+            }
+            .right:active polyline {
+                stroke-width: 6;
+                transition: all 100ms ease-in-out;
+            }
+            .svgWall {
+                width: 18vw;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class='container'>
+            <button class="arrow left" onclick="makeWalls()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="2vw" height="2vw" viewBox="0 0 50 80" xml:space="preserve">
+                    <polyline fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="45.63,75.8 0.375,38.087 45.63,0.375 "/>
+                </svg>  
+            </button>
+            <svg class='svgWall' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 160"></svg>
+            <svg class="svgWall" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 160"></svg>
+            <svg class="svgWall" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 160"></svg>
+            <button class="arrow right" onclick="makeWalls()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="2vw" height="2vw" viewBox="0 0 50 80" xml:space="preserve">
+                    <polyline fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="0.375,0.375 45.63,38.087 0.375,75.8 "/>
+                </svg>
+            </button>
+        </div>
+        <button id="saveBtn">SAVE ALL</button>
+    </body>
+
+    <script type='text/javascript'>
+
+        let svgCount = 0;
+        const svgs = document.getElementsByClassName('svgWall');
+
+        // DRAWING WALLS
+        makeWalls();
+
+        function makeWalls() {
+            // DRAWING WALLS
+            for (svg of svgs) {
+                makeWall(w=128, h=160, u=16);
+            };
+        }
+
+        function makeWall(w=128, h=160, u=16) {
+
+            const svgns = 'http://www.w3.org/2000/svg';
+
+            const nColors = getRandomIntBetween(2, 8);
+            const colorArray = [];
+
+            for (let i = 0; i < nColors; i++) {
+                colorArray.push(getRandomColor());
+            }
+
+            let rotations = [];
+            let colorCombis = [];
+            for (x = 0; x < w - u + 1; x += u) {
+                for (y = 0; y < h - u + 1; y += u) {
+                    
+                    const unitColors = [];
+                    let colorOne = getRandomElement(colorArray);
+                    let colorTwo = getRandomElement(colorArray);
+                    unitColors.push(colorOne);
+                    unitColors.push(colorTwo);
+                    colorCombis.push(unitColors);
+
+                    let base = document.createElementNS(svgns, 'rect');
+                    base.setAttribute('x', `${x}`);
+                    base.setAttribute('y', `${y}`);
+                    base.setAttribute('width', `${u}`);
+                    base.setAttribute('height', `${u}`);
+                    base.setAttribute('fill', colorOne);
+                    svg.appendChild(base);
+
+                    let rot = Math.floor(Math.random() * 2);
+                    rotations.push(rot);
+                    let triangle = document.createElementNS(svgns, 'polygon');
+
+                    if (rot === 0) {
+                        triangle.setAttribute('points', `${x} ${y} ${x + u} ${y} ${x} ${y + u} ${x} ${y}`);
+                    } else {
+                        triangle.setAttribute('points', `${x} ${y} ${x + u} ${y} ${x + u} ${y + u} ${x} ${y}`);
+                    };
+
+                    triangle.setAttribute('stroke', 'none');
+                    triangle.setAttribute('stroke-width', '0');
+                    triangle.setAttribute('fill', colorTwo);
+
+                    svg.appendChild(triangle);
+                };
+            };
+
+            for (x = 0; x < w - u + 1; x += u) {
+                const vline = document.createElementNS('http://www.w3.org/2000/svg','line');
+                vline.setAttribute('x1', `${x}`);
+                vline.setAttribute('y1', '0');
+                vline.setAttribute('x2', `${x}`);
+                vline.setAttribute('y2', `${h}`);
+                vline.setAttribute('stroke', '#FAFAFA');
+                vline.setAttribute('stroke-width', '0.15pt');
+                svg.appendChild(vline);
+            };
+
+            for (y = 0; y < h - u + 1; y += u) {
+                const hline = document.createElementNS('http://www.w3.org/2000/svg','line');
+                hline.setAttribute('x1', '0');
+                hline.setAttribute('y1', `${y}`);
+                hline.setAttribute('x2', `${w}`);
+                hline.setAttribute('y2', `${y}`);
+                hline.setAttribute('stroke', '#FAFAFA');
+                hline.setAttribute('stroke-width', '0.15pt');
+                svg.appendChild(hline);
+            };
+
+            sessionStorage.setItem(`rot${svgCount}`, `${rotations}`);
+            sessionStorage.setItem(`col${svgCount}`, `${colorCombis}`);
+
+            console.log(sessionStorage.getItem(`rot${svgCount}`));
+            console.log(sessionStorage.getItem(`col${svgCount}`));
+
+            svgCount += 1;
+        }
+
+
+        function getRandomColor() {
+            const r = Math.floor(Math.random() * 256); // Random value between 0-255 for red
+            const g = Math.floor(Math.random() * 256); // Random value between 0-255 for green
+            const b = Math.floor(Math.random() * 256); // Random value between 0-255 for blue
+            
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function generateColorArray(n) {
+            const colorArray = [];
+            for (let i = 0; i < n; i++) {
+                colorArray.push(getRandomColors());  // Call your getRandomColors() function to generate a color
+            }
+            return colorArray;
+        }
+
+        function getRandomIntBetween(a, b) {
+            return Math.floor(Math.random() * (b - a + 1)) + a;
+        }
+
+        function getRandomElement(arr) {
+            const randomIndex = Math.floor(Math.random() * arr.length);  // Generate a random index
+            return arr[randomIndex];  // Return the element at that index
+        }
+
+        function toggleAutoRefresh() {
+            // const parent = document.head
+            const refreshTag = document.getElementById('interval');
+            if (refreshTag) {
+                document.head.removeChild(refreshTag);
+                window.location.reload();
+            } else {
+                const interval = document.createElement('meta');
+                interval.setAttribute('id', 'interval');
+                interval.setAttribute('httpEquiv', 'refresh'); //.httpEquiv = "refresh";
+                interval.setAttribute('content', '5');
+                // interval.content = "5";
+                document.head.appendChild(interval);
+                window.location.reload();
+            }
+        }
+
+
+        // SAVE BUTTON
+        const btn = document.getElementById('saveBtn');
+
+        let triggerDownload = (imgURI, fileName) => {
+            let a = document.createElement('a')
+
+            a.setAttribute('download', 'image.svg')
+            a.setAttribute('href', imgURI)
+            a.setAttribute('target', '_blank')
+
+            a.click()
+        }
+
+        let save = () => {
+            for (svg of svgs) {
+                let data = (new XMLSerializer()).serializeToString(svg)
+                let svgBlob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'})
+                let url = URL.createObjectURL(svgBlob)
+
+                triggerDownload(url)
+            }
+        }
+
+        btn.addEventListener('click', save)
+    </script>
+</html>
